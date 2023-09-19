@@ -1,32 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
-import { useQuery } from '@apollo/client';
-import GET_CONTACT_LIST from './api/getContactList'
-import ContactCard from './components/ContactCard';
 
-function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
-    variables: {
-        // "where":  {
-        //     "first_name": {"_like": "%Dedi%" }
-        // }
-    }
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
-
-  console.log(data)
-
-  return (
-    <ContactCard contact={data.contact[0]}/>
-  );
-}
+import { AppBar, Typography, Container } from '@mui/material';
+import ContactPage from './views/ContactPage';
 
 function App() {
   return (
     <div className="App">
-      <DisplayLocations />
+        <AppBar position="static" sx={{ backgroundColor: 'red', padding:'20px' }}>
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+                Phonebook App
+            </Typography>
+        </AppBar>
+        <Container sx={{
+            marginTop: '20px'
+        }}>
+            <ContactPage />
+        </Container>
     </div>
   );
 }
