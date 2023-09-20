@@ -10,7 +10,8 @@ const ADD_CONTACT_WITH_PHONES = gql`
             objects: {
                 first_name: $first_name, 
                 last_name: 
-                $last_name, phones: { 
+                $last_name, 
+                phones: { 
                     data: $phones
                     }
                 }
