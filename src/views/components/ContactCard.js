@@ -10,7 +10,7 @@ import DeleteModal from './DeleteModal';
 // import ModalConfirm from 'components/ModalConfirm';
 
 
-function ContactCard({ contact }) {
+function ContactCard({ contact, setFavo }) {
     const { id, first_name, last_name, phones } = contact;
     const [favourite, setFavourite] = useState(false);
     const [detail, setDetail] = useState(false);
@@ -18,6 +18,7 @@ function ContactCard({ contact }) {
 
     const favouriteHandler = () => {
         setFavourite(current => !current)
+        console.log(id)
     }
 
     const detailModalHandler = () => {
@@ -63,7 +64,7 @@ function ContactCard({ contact }) {
                         {favourite? (
                             <StarIcon onClick={favouriteHandler} sx={{ color: 'gold' }}/>
                         ) : (
-                            <StarBorderIcon onClick={favouriteHandler} sx={{ color: 'rgb(150, 150, 150)' }}/>
+                            <StarBorderIcon onClick={setFavo} sx={{ color: 'rgb(150, 150, 150)' }}/>
                         )}
                         
                         <EditOutlinedIcon onClick={detailModalHandler} sx={{ color: 'rgb(150, 150, 150)' }} />

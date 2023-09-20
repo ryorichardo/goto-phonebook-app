@@ -7,14 +7,15 @@ import ContactPage from './views/ContactPage';
 function App() {
     return (
         <div className="App">
-            <AppBar position="fixed" sx={{ backgroundColor:"#304ffe", padding:'20px', boxShadow:'none' }}>
+            <AppBar position="fixed" sx={{ backgroundColor:"primary", padding:'20px' }}>
                 <Typography variant="h4" color="white" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
                     Phonebook App
                 </Typography>
             </AppBar>
             <Container sx={{
                 marginTop: 12,
-                marginBottom: 2
+                marginBottom: 2,
+                padding: "0 !important"
             }}>
                 <ContactPage />
             </Container>
