@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ADD_CONTACT_WITH_PHONES from '../../api/addContactWithPhones';
+import GET_CONTACT_LIST from '../../api/getContactList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
@@ -19,14 +20,11 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   }));
 
 function CreateContactModal(props) {
-    const { open, setOpen, refetch } = props;
+    const { open, setOpen } = props;
     const [firstName, setFirstName] = useState()
     const [lastName, setLastName] = useState()
     const [phone, setPhone] = useState()
-    const [createContact, { data, loading, error }] = useMutation(ADD_CONTACT_WITH_PHONES, {
-        onComplete: (data) => {
-        refetch()
-    }});
+    const [createContact, { data, loading, error }] = useMutation(ADD_CONTACT_WITH_PHONES);
 
     const createContactHandler = () => {
         createContact({
@@ -34,7 +32,11 @@ function CreateContactModal(props) {
                 first_name: firstName,
                 last_name: lastName,
                 phones: [{number: phone}]
-            }
+            },
+            refetchQueries: [{
+                query: GET_CONTACT_LIST,
+                awaitRefetchQueries: true,
+            }],
         })
         setOpen()
     }

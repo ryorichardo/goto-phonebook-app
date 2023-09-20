@@ -10,7 +10,7 @@ import DeleteModal from './DeleteModal';
 // import ModalConfirm from 'components/ModalConfirm';
 
 
-function ContactCard({ contact, handleDelete }) {
+function ContactCard({ contact }) {
     const { id, first_name, last_name, phones } = contact;
     const [favourite, setFavourite] = useState(false);
     const [detail, setDetail] = useState(false);
