@@ -20,11 +20,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   }));
 
 function CreateContactModal(props) {
-    const { open, setOpen } = props;
+    const { open, setOpen, refetch } = props;
     const [firstName, setFirstName] = useState()
     const [lastName, setLastName] = useState()
     const [phone, setPhone] = useState()
-    const [createContact, { data, loading, error }] = useMutation(ADD_CONTACT_WITH_PHONES);
+    const [createContact] = useMutation(ADD_CONTACT_WITH_PHONES, {
+        onComplete: () => {
+            refetch()
+    }});
 
     const createContactHandler = () => {
         createContact({
@@ -61,6 +64,7 @@ function CreateContactModal(props) {
                         fullWidth
                         variant="standard"
                         onChange={(e) => setFirstName(e.target.value)}
+                        sx={{ marginBottom: 1 }}
                     />
                     <TextField
                         required
@@ -70,6 +74,7 @@ function CreateContactModal(props) {
                         fullWidth
                         variant="standard"
                         onChange={(e) => setLastName(e.target.value)}
+                        sx={{ marginBottom: 1 }}
                     />
                     <TextField
                         required

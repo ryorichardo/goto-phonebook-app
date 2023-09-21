@@ -1,27 +1,24 @@
 import PropTypes from 'prop-types';
-import { Button, Card, Grid, IconButton, Stack, Typography, Box, CardActionArea } from '@mui/material';
+import {  Card, Grid, Stack, Typography, Box, CardActionArea } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { useState } from 'react';
-import ContactDetail from './ContactDetail';
-import DeleteModal from './DeleteModal';
 // import ModalConfirm from 'components/ModalConfirm';
 
 
-function ContactCard({ contact, listFavo, setFavo, removeFavo }) {
-    const [detail, setDetail] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-
+function ContactCard({ contact, setSelectedContact, setDetailModal, setDeleteModal, listFavo, setFavo, removeFavo }) {
     const favouriteHandler = () => {
+        setSelectedContact(contact)
         setFavo(contact.id)
     }
 
     const detailModalHandler = () => {
-        setDetail(current => !current)
+        setSelectedContact(contact)
+        setDetailModal(current => !current)
     }
 
     const deleteModalHandler = () => {
+        setSelectedContact(contact)
         setDeleteModal(current => !current)
     }
 
@@ -62,19 +59,6 @@ function ContactCard({ contact, listFavo, setFavo, removeFavo }) {
                         <DeleteOutlineOutlinedIcon onClick={deleteModalHandler} sx={{ color: 'rgb(150, 150, 150)' }} />
                     </Grid>
                 </Grid>            
-                <ContactDetail
-                    open={detail}
-                    setOpen={detailModalHandler}
-                    contact={contact}
-                    listFavo={listFavo}
-                    setFavo={setFavo}
-                    removeFavo={removeFavo}
-                />
-                <DeleteModal
-                    open={deleteModal}
-                    setOpen={deleteModalHandler}
-                    contact={contact}
-                />
             </CardActionArea>
         </Card>
     );

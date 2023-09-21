@@ -12,24 +12,23 @@ import GET_CONTACT_LIST from '../api/getContactList';
 
 import ContactCard from './components/ContactCard';
 import CreateContactModal from './components/CreateContactModal';
+import ContactDetail from './components/ContactDetail';
+import DeleteModal from './components/DeleteModal';
 import HorizontalGrid from './components/FavouriteContactCard';
 
 function ContactPage() {
     const { id } = useParams();
     // const [contact, setContact] = useState();
 
-    const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
-        variables: {
-            // "where":  {
-            //     "first_name": {"_like": "%Dedi%" }
-            // }
-        }
-    });
+    const { data, refetch } = useQuery(GET_CONTACT_LIST);
 
-    const [createContact, setCreateContact] = useState(false)
+    const [createModal, setCreateModal] = useState(false)
     const [page, setPage] = useState(1)
     const [contactList, setContactList] = useState([])
     const [favourite, setFavourite] = useState([])
+    const [selectedContact, setSelectedContact] = useState()
+    const [detailModal, setDetailModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
 
     useEffect(() => {
         if (localStorage.getItem('list_contact') && localStorage.getItem('list_contact') !== 'undefined') {
@@ -40,6 +39,13 @@ function ContactPage() {
             localStorage.setItem('list_contact', JSON.stringify(data?.contact))
         }
     }, [page, data]);
+
+    useEffect(() => {
+        if (refetch) {
+            setContactList(data?.contact)
+            localStorage.setItem('list_contact', JSON.stringify(data?.contact))
+        }
+    }, [data, refetch])
 
     useEffect(() => {
         if (localStorage.getItem('list_favourite') && localStorage.getItem('list_favourite') !== 'undefined') {
@@ -69,8 +75,16 @@ function ContactPage() {
         }
     }
 
+    const detailModalHandler = () => {
+        setDetailModal(current => !current)
+    }
+
+    const deleteModalHandler = () => {
+        setDeleteModal(current => !current)
+    }
+
     const createContactModalHandler = () => {
-        setCreateContact(current => !current)
+        setCreateModal(current => !current)
     }
 
     const paginationHandler = (event, newPage) => {
@@ -80,16 +94,15 @@ function ContactPage() {
 
     return (
         <>
-            {contactList.filter((contact) => favourite.includes(contact.id)).length > 0? (
+            {contactList?.filter((contact) => favourite.includes(contact.id)).length > 0? (
                 <Container sx={{ backgroundColor: "#1776D2" }}>
                     <Container sx={{ position: "sticky", top: "80px", paddingTop:"10px", backgroundColor: "#1776D2", zIndex: 1 }}>
                         <Typography color="white" variant="h6">Favourite contacts</Typography>
                     </Container>
                     <HorizontalGrid 
                         contacts={contactList.filter((contact) => favourite.includes(contact.id))} 
-                        listFavo={favourite}
-                        setFavo={addFavouriteHandler}
-                        removeFavo={removeFavouriteHandler}
+                        setSelectedContact={setSelectedContact}
+                        setDetailModal={setDetailModal}
                     />
                 </Container>
             ) : (<></>)}
@@ -98,25 +111,26 @@ function ContactPage() {
                 <Container sx ={{ backgroundColor: "#fafafa", height: "30px", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}></Container>
             </Container>
             <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2, minHeight: "45vh" }}>
-                {contactList.filter((contact) => !favourite.includes(contact.id)).length > 0? (
+                {contactList?.filter((contact) => !favourite.includes(contact.id)).length > 0? (
                     <>
                         <Grid container spacing={gridSpacing}>
-                            {contactList.filter((contact) => !favourite.includes(contact.id))
+                            {contactList?.filter((contact) => !favourite.includes(contact.id))
                                 .slice((page-1)*10, Math.min(contactList?.length, page*10))
                                 .map((contact) => (
                                 <Grid item xl={12} lg={12} md={12} xs={12} key={contact.id}>
                                     <ContactCard 
                                         contact={contact} 
-                                        listFavo={favourite} 
-                                        setFavo={addFavouriteHandler} 
-                                        removeFavo={removeFavouriteHandler}
+                                        setFavo={addFavouriteHandler}
+                                        setSelectedContact={setSelectedContact}
+                                        setDetailModal={setDetailModal}
+                                        setDeleteModal={setDeleteModal}
                                     />
                                 </Grid>
                             ))}
                         </Grid>
                         <Pagination 
                             color="primary" 
-                            count={Math.ceil(contactList.filter((contact) => !favourite.includes(contact.id)).length/10)} 
+                            count={Math.ceil(contactList?.filter((contact) => !favourite.includes(contact.id)).length/10)} 
                             page={page} 
                             onChange={paginationHandler} 
                             sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
@@ -127,7 +141,21 @@ function ContactPage() {
                 )}
             </Container>
             <AddCircleIcon onClick={createContactModalHandler} color="primary" sx={{ position:'fixed', bottom: 30, right: 30, fontSize:60}} />
-            <CreateContactModal open={createContact} setOpen={createContactModalHandler} />
+            <CreateContactModal open={createModal} setOpen={createContactModalHandler} refetch={refetch} />
+            <ContactDetail
+                open={detailModal}
+                setOpen={detailModalHandler}
+                contact={selectedContact}
+                listFavo={favourite}
+                setFavo={addFavouriteHandler}
+                removeFavo={removeFavouriteHandler}
+            />
+            <DeleteModal
+                open={deleteModal}
+                setOpen={deleteModalHandler}
+                contact={selectedContact}
+                refetch={refetch}
+            />
         </>
 
     );
