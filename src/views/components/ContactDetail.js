@@ -1,12 +1,17 @@
-import { Card, CardMedia, CardContent, CardActions, Button, Typography, Dialog, List, ListItem, Grid, TextField } from '@mui/material';
+import { Card, CardMedia, CardContent, Button, Typography, Dialog, List, ListItem, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import { styled } from '@mui/material/styles';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import React from 'react';
 import { useState } from 'react';
 import DeleteModal from './DeleteModal';
+import { useMutation } from '@apollo/client';
+import EDIT_CONTACT from '../../api/editContact';
+import GET_CONTACT_LIST from '../../api/getContactList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
@@ -15,23 +20,25 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   }));
 
 function ContactDetail(props) {
-    const { open, setOpen, contact, listFavo, setFavo, removeFavo } = props;
+    const { open, setOpen, contact, listFavo, setFavo, removeFavo, refetch } = props;
     const [deleteModal, setDeleteModal] = useState(false);
     const [edit, setEdit] = useState(false);
     const [firstName, setFirstName] = useState(contact?.first_name)
     const [lastName, setLastName] = useState(contact?.last_name)
-    const [phone, setPhone] = useState(contact?.phones[0].number)
+    const [phone, setPhone] = useState(contact?.phones)
+    const [editContact] = useMutation(EDIT_CONTACT, {
+        onComplete: () => {
+            refetch()
+    }});
 
     const deleteModalHandler = () => {
         setDeleteModal(current => !current)
     }
 
     const editModeHandler = () => {
-        if (edit) {
-            setFirstName(contact.first_name)
-            setLastName(contact.last_name)
-            setPhone(contact.phones[0].number)
-        }
+        setFirstName(contact.first_name)
+        setLastName(contact.last_name)
+        setPhone(contact.phones)
         setEdit(current => !current)
     }
 
@@ -43,8 +50,62 @@ function ContactDetail(props) {
         removeFavo(contact.id)
     }
 
+    const changePhoneHandler = (index, event) => {
+        const values = [...phone];
+        values[index].number = event.target.value;
+        setPhone(values);
+    };
+
+    const addPhoneHandler = () => {
+        setPhone([...phone, { number: '' }]);
+    };
+
+    const removePhoneHandler = (index) => {
+        const values = [...phone];
+        values.splice(index, 1);
+        setPhone(values);
+    };
+
+
+
+    const arraysEqual = (a1, a2) => {
+        const objectsEqual = (o1, o2) => 
+        typeof o1 === 'object' && Object.keys(o1).length > 0 
+            ? Object.keys(o1).length === Object.keys(o2).length 
+                && Object.keys(o1).every(p => objectsEqual(o1[p], o2[p]))
+            : o1 === o2;
+        
+            return (a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx])));
+    }
+
+    const editContactHandler = () => {
+        if (
+            firstName !== contact.first_name ||
+            lastName !== contact.last_name ||
+            !arraysEqual(phone, contact.phones)
+        ) {
+            editContact({
+                variables: {
+                    id: contact.id,
+                    _set: {
+                        first_name: firstName,
+                        last_name: lastName,
+                        phones: phone.filter(el => el.number !== 0)
+                    }
+                },
+                refetchQueries: [{
+                    query: GET_CONTACT_LIST,
+                    awaitRefetchQueries: true,
+                }],
+            })
+        }
+        setEdit(false)
+        setOpen()
+    }
+
     const setClose = () => {
-        setEdit(false);
+        editModeHandler()
+        setEdit(false)
         setOpen()
     }
 
@@ -96,16 +157,38 @@ function ContactDetail(props) {
                                         onChange={(e) => setLastName(e.target.value)}
                                         sx={{ marginBottom: 1 }}
                                     />
-                                    <TextField
-                                        required
-                                        id="phone"
-                                        label="Phone Number"
-                                        type="number"
-                                        fullWidth
-                                        variant="standard"
-                                        defaultValue={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                    />
+                                    {phone?.map((el, index) => (
+                                        <Grid container>
+                                            <Grid item xs={phone.length > 1? 11 : 12}>
+                                                <TextField
+                                                    required
+                                                    id={index}
+                                                    label="Phone Number"
+                                                    type="string"
+                                                    fullWidth
+                                                    variant="standard"
+                                                    value={el.number}
+                                                    onChange={(event) => changePhoneHandler(index, event)}
+                                                    sx={{ marginBottom: 1 }}
+                                                />
+                                            </Grid>
+                                            {phone.length > 1? (
+                                                <Grid item xs={1}>
+                                                    <DeleteOutlineOutlinedIcon onClick={() => removePhoneHandler(index)} sx={{ color: 'rgb(150, 150, 150)', marginLeft: 0.5, marginTop: 2.5 }} />
+                                                </Grid>
+                                            ) : (<></>)}
+                                        </Grid>
+                                    ))}
+                                    <Grid container onClick={() => addPhoneHandler()} sx={{ width: "auto" }}>
+                                        <Grid item xs={6} sx={{ maxWidth: '105px' }}>
+                                            <Typography variant="caption">
+                                                Add more Number
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <AddCircleOutlineIcon sx={{ color: 'rgb(150, 150, 150)', fontSize: 13, marginLeft: 0.25, marginTop: 0.75 }} />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={1} sx={{ marginTop: 0.5 }}>
                                     {listFavo?.includes(contact?.id)? (
@@ -118,7 +201,7 @@ function ContactDetail(props) {
                         </CardContent>
                         <DialogActions>
                             <Button size="small" onClick={editModeHandler}>Cancel</Button>
-                            <Button size="small" variant="contained">Save</Button>
+                            <Button size="small" variant="contained" onClick={editContactHandler}>Save</Button>
                         </DialogActions>
                     </>
                 ) : (
@@ -138,12 +221,9 @@ function ContactDetail(props) {
                                     )}
                                 </Grid>
                             </Grid>
-                            <Typography gutterBottom variant="h8" component="div">
-                                Phone Number
-                            </Typography>
                             <List>
                                 {contact?.phones?.map((value) => (
-                                    <ListItem>
+                                    <ListItem sx={{ paddingLeft: 0 }}>
                                         <Typography variant="body2" sx={{ fontWeight: 'normal' }}>
                                             {value.number}
                                         </Typography>

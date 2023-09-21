@@ -149,6 +149,7 @@ function ContactPage() {
                 listFavo={favourite}
                 setFavo={addFavouriteHandler}
                 removeFavo={removeFavouriteHandler}
+                refetch={refetch}
             />
             <DeleteModal
                 open={deleteModal}
