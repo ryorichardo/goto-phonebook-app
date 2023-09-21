@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { Button, Card, Grid, IconButton, Stack, Typography, Box, CardActionArea } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useState } from 'react';
@@ -10,15 +9,12 @@ import DeleteModal from './DeleteModal';
 // import ModalConfirm from 'components/ModalConfirm';
 
 
-function ContactCard({ contact, setFavo }) {
-    const { id, first_name, last_name, phones } = contact;
-    const [favourite, setFavourite] = useState(false);
+function ContactCard({ contact, listFavo, setFavo, removeFavo }) {
     const [detail, setDetail] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
 
     const favouriteHandler = () => {
-        setFavourite(current => !current)
-        console.log(id)
+        setFavo(contact.id)
     }
 
     const detailModalHandler = () => {
@@ -52,21 +48,16 @@ function ContactCard({ contact, setFavo }) {
                     </Grid>
                     <Grid item alignItems="left" xs={6} onClick={detailModalHandler}>
                         <Stack>
-                            <Typography variant="h6">{first_name} {last_name}</Typography>
-                            {phones.length > 1 ? (
-                                <Typography variant="caption">{phones[0].number} <b>+{phones.length-1} more</b></Typography>
+                            <Typography variant="h6">{contact.first_name} {contact.last_name}</Typography>
+                            {contact.phones.length > 1 ? (
+                                <Typography variant="caption">{contact.phones[0].number} <b>+{contact.phones.length-1} more</b></Typography>
                             ) : (
-                                <Typography variant="caption">{phones[0].number}</Typography>
+                                <Typography variant="caption">{contact.phones[0].number}</Typography>
                             )}
                         </Stack>
                     </Grid>
                     <Grid item xs={3} sx={{ textAlign: 'center', margin: 'auto' }}>
-                        {favourite? (
-                            <StarIcon onClick={favouriteHandler} sx={{ color: 'gold' }}/>
-                        ) : (
-                            <StarBorderIcon onClick={setFavo} sx={{ color: 'rgb(150, 150, 150)' }}/>
-                        )}
-                        
+                        <StarBorderIcon onClick={favouriteHandler} sx={{ color: 'rgb(150, 150, 150)' }}/>
                         <EditOutlinedIcon onClick={detailModalHandler} sx={{ color: 'rgb(150, 150, 150)' }} />
                         <DeleteOutlineOutlinedIcon onClick={deleteModalHandler} sx={{ color: 'rgb(150, 150, 150)' }} />
                     </Grid>
@@ -74,12 +65,15 @@ function ContactCard({ contact, setFavo }) {
                 <ContactDetail
                     open={detail}
                     setOpen={detailModalHandler}
-                    contact={{ id, first_name, last_name, phones }}
+                    contact={contact}
+                    listFavo={listFavo}
+                    setFavo={setFavo}
+                    removeFavo={removeFavo}
                 />
                 <DeleteModal
                     open={deleteModal}
                     setOpen={deleteModalHandler}
-                    contact={{ id, first_name, last_name, phones }}
+                    contact={contact}
                 />
             </CardActionArea>
         </Card>

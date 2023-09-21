@@ -53,36 +53,22 @@ function ContactPage() {
         }
     }, [])
 
-    // useEffect(() => {
-    //     localStorage.setItem('list_favourite', JSON.stringify(favourite))
-    // }, [favourite])
-
     const addFavouriteHandler = (id) => {
-        console.log('asd')
         if (!favourite.includes(id)) {
             setFavourite([...favourite, id]);
-            localStorage.setItem('list_favourite', JSON.stringify(favourite))
+            localStorage.setItem('list_favourite', JSON.stringify([...favourite, id]))
         }
     }
 
-    // const refetchData = async () => {
-    //     const result = await client.refetchQueries({
-    //         include: GET_CONTACT_LIST,
-    //     });
-    //     return result
-    // }
-
-    // useEffect(() => {
-    //     if (!createContact) {
-    //         const data = refetchData()
-    //         console.log(data)
-    //         setAllList(data)
-    //     }
-    // }, [createContact])
+    const removeFavouriteHandler = (id) => {
+        if (favourite.includes(id)) {
+            setFavourite(favourite.filter((el) => el !== id));
+            localStorage.setItem('list_favourite', JSON.stringify(favourite.filter((el) => el !== id)))
+        }
+    }
 
     const createContactModalHandler = () => {
         setCreateContact(current => !current)
-
     }
 
     const paginationHandler = (event, newPage) => {
@@ -98,21 +84,43 @@ function ContactPage() {
                         <Container sx={{ position: "sticky", top: "80px", paddingTop:"10px", backgroundColor: "#1776D2" }}>
                             <Typography color="white" variant="h6">Favourite contacts</Typography>
                         </Container>
-                        <HorizontalGrid contacts={contactList.filter((contact) => favourite.includes(contact.id))} />
+                        <HorizontalGrid 
+                            contacts={contactList.filter((contact) => favourite.includes(contact.id))} 
+                            listFavo={favourite}
+                            setFavo={addFavouriteHandler}
+                            removeFavo={removeFavouriteHandler}
+                        />
                     </Container>
                     <Container sx={{ position: "sticky", top: "80px", paddingTop:"10px", paddingLeft: 0, paddingRight: 0, backgroundColor: "#1776D2", zIndex: 1 }}>
-                        <Typography color="white" variant="h6" sx={{ paddingLeft: "32px" }}>All contacts</Typography>
+                        <Typography color="white" variant="h6" sx={{ paddingLeft: "32px" }}>Regular contacts</Typography>
                         <Container sx ={{ backgroundColor: "#fafafa", height: "30px", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}></Container>
                     </Container>
-                    <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2 }}>
-                        <Grid container spacing={gridSpacing}>
-                            {contactList.map((contact) => (
-                                <Grid item xl={12} lg={12} md={12} xs={12} key={contact.id}>
-                                    <ContactCard contact={contact} setFavo={addFavouriteHandler(contact.id)} />
+                    <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2, minHeight: "45vh" }}>
+                        {contactList.filter((contact) => !favourite.includes(contact.id)).length > 0? (
+                            <>
+                                <Grid container spacing={gridSpacing}>
+                                    {contactList.filter((contact) => !favourite.includes(contact.id)).map((contact) => (
+                                        <Grid item xl={12} lg={12} md={12} xs={12} key={contact.id}>
+                                            <ContactCard 
+                                                contact={contact} 
+                                                listFavo={favourite} 
+                                                setFavo={addFavouriteHandler} 
+                                                removeFavo={removeFavouriteHandler}
+                                            />
+                                        </Grid>
+                                    ))}
                                 </Grid>
-                            ))}
-                        </Grid>
-                        <Pagination color="primary" count={Math.ceil(allContact.contact.length/10)} page={page} onChange={paginationHandler} sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}/>
+                                <Pagination 
+                                    color="primary" 
+                                    count={Math.ceil(contactList.filter((contact) => !favourite.includes(contact.id)).length/10)} 
+                                    page={page} 
+                                    onChange={paginationHandler} 
+                                    sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+                                />
+                            </>
+                    ) : (
+                            <Typography color="primary" variant="h6" sx={{ textAlign: "center", margin: "auto" }}>No regular contacts</Typography>
+                        )}
                     </Container>
                 </>
             ) : (<></>)}
