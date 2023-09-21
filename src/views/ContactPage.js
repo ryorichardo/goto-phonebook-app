@@ -95,10 +95,16 @@ function ContactPage() {
             {allContact?.contact? (
                 <>
                     <Container>
-                        <Typography color="white" variant="h6">Favourite contacts</Typography>
+                        <Container sx={{ position: "sticky", top: "80px", paddingTop:"10px", backgroundColor: "#1776D2" }}>
+                            <Typography color="white" variant="h6">Favourite contacts</Typography>
+                        </Container>
                         <HorizontalGrid contacts={contactList.filter((contact) => favourite.includes(contact.id))} />
                     </Container>
-                    <Container sx={{ backgroundColor: "#fafafa", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}>
+                    <Container sx={{ position: "sticky", top: "80px", paddingTop:"10px", paddingLeft: 0, paddingRight: 0, backgroundColor: "#1776D2", zIndex: 1 }}>
+                        <Typography color="white" variant="h6" sx={{ paddingLeft: "32px" }}>All contacts</Typography>
+                        <Container sx ={{ backgroundColor: "#fafafa", height: "30px", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}></Container>
+                    </Container>
+                    <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2 }}>
                         <Grid container spacing={gridSpacing}>
                             {contactList.map((contact) => (
                                 <Grid item xl={12} lg={12} md={12} xs={12} key={contact.id}>
@@ -106,7 +112,7 @@ function ContactPage() {
                                 </Grid>
                             ))}
                         </Grid>
-                        <Pagination color="primary" count={Math.ceil(allContact.contact.length/10)} page={page} onChange={paginationHandler} sx={{ marginTop: 2 }}/>
+                        <Pagination color="primary" count={Math.ceil(allContact.contact.length/10)} page={page} onChange={paginationHandler} sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}/>
                     </Container>
                 </>
             ) : (<></>)}

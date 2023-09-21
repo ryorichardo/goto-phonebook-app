@@ -4,7 +4,7 @@ import ContactDetail from './ContactDetail';
 
 const HorizontalGrid = ({ contacts }) => {
     return (
-        <Grid container sx={{ width: "100%", overflowX: "auto", flexWrap: "nowrap", display: "flex", marginBottom: 1 }}>
+        <Grid container sx={{ width: "100%", overflowX: "auto", flexWrap: "nowrap", display: "flex" }}>
             {contacts.length? (
                 contacts.map(contact => (
                 <Grid item sx ={{ flex: "0 0 auto", margin: 1, width: 100, textAlign: "center", color:"white" }}>

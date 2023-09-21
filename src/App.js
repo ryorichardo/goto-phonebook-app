@@ -14,8 +14,7 @@ function App() {
             </AppBar>
             <Container sx={{
                 marginTop: 12,
-                marginBottom: 2,
-                padding: "0 !important"
+                padding: 0,
             }}>
                 <ContactPage />
             </Container>
