@@ -13,7 +13,7 @@ function App() {
                 </Typography>
             </AppBar>
             <Container sx={{
-                marginTop: 12,
+                marginTop: 10,
                 padding: 0,
             }}>
                 <ContactPage />
