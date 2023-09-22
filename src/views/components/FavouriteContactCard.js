@@ -1,18 +1,18 @@
 import React from 'react';
 import {  Grid, IconButton, Stack, Typography, Box, CardActionArea } from '@mui/material';
 
-const HorizontalGrid = ({ contacts, setSelectedContact, setDetailModal }) => {
+const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) => {
     const detailModalHandler = (contact) => {
         setSelectedContact(contact)
         setDetailModal(current => !current)
     }
 
     return (
-        <Grid container sx={{ width: "100%", overflowX: "auto", flexWrap: "nowrap", display: "flex" }}>
+        <Grid container sx={{ width: "100%", overflowX: "auto", flexWrap: "nowrap", display: "flex", marginTop: 5 }}>
             {contacts.length? (
                 contacts.map(contact => (
                     <CardActionArea onClick={() => detailModalHandler(contact)} sx={{ borderRadius: 5, width: "auto" }}>
-                        <Grid item sx ={{ flex: "0 0 auto", margin: 1, width: 100, textAlign: "center", color:"white" }}>
+                        <Grid item sx ={{ flex: "0 0 auto", margin: 1, marginBottom: 0, width: 100, textAlign: "center", color:"white" }}>
                             <Stack justifyContent='center' alignContent='center'>
                                 <Box 
                                     component="img"
@@ -36,10 +36,10 @@ const HorizontalGrid = ({ contacts, setSelectedContact, setDetailModal }) => {
                         </Grid>
                     </CardActionArea>
             ))) : (
-                <Typography color="white" variant="h6" sx={{ textAlign: "center", margin: "auto", marginTop: 1.5 }}>No favourite contacts</Typography>
+                <Typography color="white" variant="h7" sx={{ textAlign: "center", margin: "auto", marginTop: 1.5 }}>No favourite contacts</Typography>
             )}
         </Grid>            
     );
 };
 
-export default HorizontalGrid;
+export default FavouriteContactCard;

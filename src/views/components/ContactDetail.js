@@ -144,7 +144,7 @@ function ContactDetail(props) {
 
     return (
         <BootstrapDialog open={open} onClose={setClose}>
-            <Card sx={{ width: { xs: 300, md: 500 } }}>
+            <Card sx={{ width: { xs: 300, md: 500 }, overflowY: "scroll"  }}>
                 <CardMedia
                     component="img"
                     alt="Profile pic"
