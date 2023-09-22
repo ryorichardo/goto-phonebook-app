@@ -90,7 +90,8 @@ function ContactPage({ search }) {
     }
 
     const filterSearchHandler = (contact) => {
-        return (contact.first_name.toLowerCase().includes(search) ||
+        return (search === undefined ||
+                contact.first_name.toLowerCase().includes(search) ||
                 contact.last_name.toLowerCase().includes(search) ||
                 (contact.first_name.toLowerCase() + " " + contact.last_name.toLowerCase()).includes(search))
     }
