@@ -6,9 +6,6 @@ const EDIT_CONTACT = gql`
             id
             first_name
             last_name
-            phones {
-                number
-            }
         }
     }  
 `;

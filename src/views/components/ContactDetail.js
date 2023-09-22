@@ -11,6 +11,8 @@ import { useState } from 'react';
 import DeleteModal from './DeleteModal';
 import { useMutation } from '@apollo/client';
 import EDIT_CONTACT from '../../api/editContact';
+import EDIT_PHONE_NUMBER from '../../api/editPhoneNumber';
+import ADD_NUMBER_TO_CONTACT from '../../api/addNumberToContact';
 import GET_CONTACT_LIST from '../../api/getContactList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -25,8 +27,16 @@ function ContactDetail(props) {
     const [edit, setEdit] = useState(false);
     const [firstName, setFirstName] = useState(contact?.first_name)
     const [lastName, setLastName] = useState(contact?.last_name)
-    const [phone, setPhone] = useState(contact?.phones)
+    const [phone, setPhone] = useState(contact?.phones.map((el) => { return el.number }))
     const [editContact] = useMutation(EDIT_CONTACT, {
+        onComplete: () => {
+            refetch()
+    }});
+    const [editPhone] = useMutation(EDIT_PHONE_NUMBER, {
+        onComplete: () => {
+            refetch()
+    }});
+    const [addPhone] = useMutation(ADD_NUMBER_TO_CONTACT, {
         onComplete: () => {
             refetch()
     }});
@@ -36,9 +46,9 @@ function ContactDetail(props) {
     }
 
     const editModeHandler = () => {
-        setFirstName(contact.first_name)
-        setLastName(contact.last_name)
-        setPhone(contact.phones)
+        setFirstName(contact?.first_name)
+        setLastName(contact?.last_name)
+        setPhone(contact?.phones.map((el) => { return el.number }))
         setEdit(current => !current)
     }
 
@@ -52,12 +62,12 @@ function ContactDetail(props) {
 
     const changePhoneHandler = (index, event) => {
         const values = [...phone];
-        values[index].number = event.target.value;
+        values[index] = event.target.value;
         setPhone(values);
     };
 
     const addPhoneHandler = () => {
-        setPhone([...phone, { number: '' }]);
+        setPhone([...phone, '']);
     };
 
     const removePhoneHandler = (index) => {
@@ -66,31 +76,18 @@ function ContactDetail(props) {
         setPhone(values);
     };
 
-
-
     const arraysEqual = (a1, a2) => {
-        const objectsEqual = (o1, o2) => 
-        typeof o1 === 'object' && Object.keys(o1).length > 0 
-            ? Object.keys(o1).length === Object.keys(o2).length 
-                && Object.keys(o1).every(p => objectsEqual(o1[p], o2[p]))
-            : o1 === o2;
-        
-            return (a1.length === a2.length && a1.every((o, idx) => objectsEqual(o, a2[idx])));
+        return (a1.length === a2.length && a1.every((el, idx) => el.number === a2[idx]));
     }
 
     const editContactHandler = () => {
-        if (
-            firstName !== contact.first_name ||
-            lastName !== contact.last_name ||
-            !arraysEqual(phone, contact.phones)
-        ) {
+        if (firstName !== contact.first_name || lastName !== contact.last_name ) {
             editContact({
                 variables: {
                     id: contact.id,
                     _set: {
                         first_name: firstName,
                         last_name: lastName,
-                        phones: phone.filter(el => el.number !== 0)
                     }
                 },
                 refetchQueries: [{
@@ -98,7 +95,43 @@ function ContactDetail(props) {
                     awaitRefetchQueries: true,
                 }],
             })
+        } 
+
+        if (!arraysEqual(phone, contact.phones)) {
+            contact.phones.forEach((_, idx) => {
+                if (contact.phones[idx].number !== phone[idx]) {
+                    editPhone({
+                        variables: {
+                            pk_columns: {
+                                number: contact.phones[idx].number,
+                                contact_id: contact.id
+                            },
+                            new_phone_number: phone[idx]
+                        },
+                        refetchQueries: [{
+                            query: GET_CONTACT_LIST,
+                            awaitRefetchQueries: true,
+                        }],
+                    })
+                }
+            })
         }
+
+        if (phone.length > contact.phones.length) {
+            for (let i = contact.phones.length; i < phone.length; i++) {
+                addPhone({
+                    variables: {
+                            contact_id: contact.id,
+                            phone_number: phone[i]
+                    },
+                    refetchQueries: [{
+                        query: GET_CONTACT_LIST,
+                        awaitRefetchQueries: true,
+                    }],
+                })
+            }
+        }
+
         setEdit(false)
         setOpen()
     }
@@ -167,7 +200,7 @@ function ContactDetail(props) {
                                                     type="string"
                                                     fullWidth
                                                     variant="standard"
-                                                    value={el.number}
+                                                    value={el}
                                                     onChange={(event) => changePhoneHandler(index, event)}
                                                     sx={{ marginBottom: 1 }}
                                                 />
