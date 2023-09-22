@@ -57,7 +57,7 @@ function App() {
                             Phonebook App
                         </Typography>
                     </AppBar>
-                    <Container sx={{ padding: "0 !important", margin: 0 }}>
+                    <Container sx={{ padding: "0 !important", margin: 0, maxWidth:"100vw !important" }}>
                         <DesktopContactPage/>
                     </Container>
                 </>

@@ -1,11 +1,14 @@
 :root {
-  background-color: #fafafa
-  ;
+  background-color: #fafafa;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.MuiCard-root::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

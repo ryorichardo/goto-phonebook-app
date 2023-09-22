@@ -1,27 +1,19 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Card, CardMedia, Grid, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import ADD_CONTACT_WITH_PHONES from '../../api/addContactWithPhones';
 import GET_CONTACT_LIST from '../../api/getContactList';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-    '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-        borderRadius: '10px'
-    }
-  }));
-
 function CreateContactModal(props) {
-    const { open, setOpen, refetch } = props;
+    const { setOpen, refetch } = props;
     const [firstName, setFirstName] = useState()
     const [lastName, setLastName] = useState()
     const [phone, setPhone] = useState([{number: ''}])
@@ -69,8 +61,7 @@ function CreateContactModal(props) {
     }
 
     return (
-        <BootstrapDialog open={open} onClose={closeModalHandler}>
-            <Card sx={{ width: { xs: 300, md: 500 }, overflowY: "scroll" }}>
+            <Card sx={{ width: { xs: 300, md: 400 }, overflowY: "scroll", borderRadius: "15px", maxHeight: { xs: "500px" } }}>
                 <CardMedia
                     component="img"
                     alt="Profile pic"
@@ -137,7 +128,6 @@ function CreateContactModal(props) {
                     <Button size="small" variant="contained" onClick={createContactHandler}>Create</Button>
                 </DialogActions>
             </Card>
-        </BootstrapDialog>
     );
 }
 

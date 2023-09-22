@@ -6,6 +6,8 @@ import { Card, Container, Grid, Stack, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { gridSpacing } from '../configs/constant';
+import Dialog from '@mui/material/Dialog';
+import { styled } from '@mui/material/styles';
 
 import GET_CONTACT_LIST from '../api/getContactList';
 
@@ -14,6 +16,13 @@ import CreateContactModal from './components/CreateContactModal';
 import ContactDetail from './components/ContactDetail';
 import DeleteModal from './components/DeleteModal';
 import FavouriteContactCard from './components/FavouriteContactCard';
+
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
+        borderRadius: '15px'
+    }
+  }));
 
 function ContactPage({ search }) {
 
@@ -26,6 +35,7 @@ function ContactPage({ search }) {
     const [selectedContact, setSelectedContact] = useState()
     const [detailModal, setDetailModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
+    const [edit, setEdit] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('list_contact') && localStorage.getItem('list_contact') !== 'undefined') {
@@ -145,16 +155,22 @@ function ContactPage({ search }) {
                 )}
             </Container>
             <AddCircleIcon onClick={createContactModalHandler} color="primary" sx={{ position:'fixed', bottom: 30, right: 30, fontSize:60}} />
-            <CreateContactModal open={createModal} setOpen={createContactModalHandler} refetch={refetch} />
-            <ContactDetail
-                open={detailModal}
-                setOpen={detailModalHandler}
-                contact={selectedContact}
-                listFavo={favourite}
-                setFavo={addFavouriteHandler}
-                removeFavo={removeFavouriteHandler}
-                refetch={refetch}
-            />
+            <BootstrapDialog open={createModal} onClose={createContactModalHandler}>
+                <CreateContactModal open={createModal} setOpen={createContactModalHandler} refetch={refetch} />
+            </BootstrapDialog>
+            <BootstrapDialog open={detailModal} onClose={detailModalHandler}>
+                <ContactDetail
+                    open={detailModal}
+                    setOpen={detailModalHandler}
+                    edit={edit}
+                    setEdit={setEdit}
+                    contact={selectedContact}
+                    listFavo={favourite}
+                    setFavo={addFavouriteHandler}
+                    removeFavo={removeFavouriteHandler}
+                    refetch={refetch}
+                />
+            </BootstrapDialog>
             <DeleteModal
                 open={deleteModal}
                 setOpen={deleteModalHandler}

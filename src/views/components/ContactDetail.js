@@ -1,6 +1,5 @@
-import { Card, CardMedia, CardContent, Button, Typography, Dialog, List, ListItem, Grid, TextField } from '@mui/material';
+import { Card, CardMedia, CardContent, Button, Typography, List, ListItem, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
-import { styled } from '@mui/material/styles';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
@@ -14,17 +13,15 @@ import EDIT_CONTACT from '../../api/editContact';
 import EDIT_PHONE_NUMBER from '../../api/editPhoneNumber';
 import ADD_NUMBER_TO_CONTACT from '../../api/addNumberToContact';
 import GET_CONTACT_LIST from '../../api/getContactList';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-    '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-      borderRadius: '10px',
-    }
-  }));
 
 function ContactDetail(props) {
-    const { open, setOpen, contact, listFavo, setFavo, removeFavo, refetch } = props;
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const { open, setOpen, edit, setEdit, contact, listFavo, setFavo, removeFavo, refetch } = props;
     const [deleteModal, setDeleteModal] = useState(false);
-    const [edit, setEdit] = useState(false);
     const [firstName, setFirstName] = useState(contact?.first_name)
     const [lastName, setLastName] = useState(contact?.last_name)
     const [phone, setPhone] = useState(contact?.phones.map((el) => { return el.number }))
@@ -143,25 +140,39 @@ function ContactDetail(props) {
     }
 
     return (
-        <BootstrapDialog open={open} onClose={setClose}>
-            <Card sx={{ width: { xs: 300, md: 500 }, overflowY: "scroll"  }}>
+        <>
+            <Card sx={{ width: { xs: 300, md: 400 }, overflowY: "scroll", borderRadius: "15px", maxHeight: { xs: "500px" } }}>
                 <CardMedia
                     component="img"
                     alt="Profile pic"
                     height="200"
                     image="https://i.pinimg.com/736x/2c/d0/16/2cd0166a3b2f3ae98caf92daaa075e05.jpg"
                 />
-                <DeleteOutlineRoundedIcon onClick={deleteModalHandler} sx={{ 
-                    backgroundColor:'rgba(255, 255, 255, 0.5)', 
-                    borderRadius:5,
-                    padding: 0.5,
-                    color: 'white', 
-                    position:'absolute', 
-                    top: 10, 
-                    right: 10,
-                    fontSize: 20
-                    }} 
-                />
+                {!matches ? (
+                    <DeleteOutlineRoundedIcon onClick={deleteModalHandler} sx={{ 
+                        backgroundColor:'rgba(255, 255, 255, 0.5)', 
+                        borderRadius:5,
+                        padding: 0.5,
+                        color: 'white', 
+                        position:'absolute', 
+                        top: 10, 
+                        right: 10,
+                        fontSize: 20
+                        }} 
+                    />
+                ) : (
+                    <DeleteOutlineRoundedIcon onClick={deleteModalHandler} sx={{ 
+                        backgroundColor:'rgba(255, 255, 255, 0.5)', 
+                        borderRadius:5,
+                        padding: 0.5,
+                        color: 'white', 
+                        position:'absolute', 
+                        top: 40, 
+                        right: 35,
+                        fontSize: 20
+                        }} 
+                    />
+                )}
                 {edit? (
                     <>
                         <CardContent>
@@ -277,7 +288,7 @@ function ContactDetail(props) {
                     setOpen={deleteModalHandler}
                     contact={contact}
             />
-        </BootstrapDialog>
+        </>
     )
 }
 

@@ -8,7 +8,7 @@ import GET_CONTACT_LIST from '../../api/getContactList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-      borderRadius: '10px',
+      borderRadius: '15px',
     }
   }));
 

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
 
 import { Card, Container, Grid, Stack, Typography } from '@mui/material';
@@ -22,14 +21,15 @@ function DesktopContactPage() {
 
     const { data, refetch } = useQuery(GET_CONTACT_LIST);
 
-    const [createModal, setCreateModal] = useState(false)
+    const [createCard, setCreateCard] = useState(false)
     const [page, setPage] = useState(1)
     const [contactList, setContactList] = useState([])
     const [favourite, setFavourite] = useState([])
     const [selectedContact, setSelectedContact] = useState()
-    const [detailModal, setDetailModal] = useState(false)
+    const [detailCard, setDetailCard] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
     const [search, setSearch] = useState()
+    const [edit, setEdit] = useState(false);
 
     useEffect(() => {
         if (localStorage.getItem('list_contact') && localStorage.getItem('list_contact') !== 'undefined') {
@@ -76,16 +76,30 @@ function DesktopContactPage() {
         }
     }
 
-    const detailModalHandler = () => {
-        setDetailModal(current => !current)
+    const openDetailCardHandler = () => {
+        setEdit(false)
+        setDetailCard(true)
+        setCreateCard(false)
+    }
+
+    const closeDetailCardHandler = () => {
+        setEdit(false)
+        setDetailCard(false)
+        setCreateCard(false)
     }
 
     const deleteModalHandler = () => {
         setDeleteModal(current => !current)
     }
 
-    const createContactModalHandler = () => {
-        setCreateModal(current => !current)
+    const openCreateContactCardHandler = () => {
+        setCreateCard(true)
+        setDetailCard(false)
+    }
+
+    const closeCreateContactCardHandler = () => {
+        setCreateCard(false)
+        setDetailCard(false)
     }
 
     const paginationHandler = (event, newPage) => {
@@ -101,9 +115,9 @@ function DesktopContactPage() {
     }
 
     return (
-        <Grid container sx={{ padding: "0 !important", width: "100vw" }}>
+        <Grid container sx={{ padding: "0 !important" }}>
             <Grid item sm={6}>
-                <Container sx={{ width: "50%", position: "fixed", top: "70px", zIndex: 2, backgroundColor: "#1776D2", padding: 2 }}>
+                <Container sx={{ width: "50% !important", position: "fixed", top: "70px", zIndex: 2, backgroundColor: "#1776D2", padding: 2 }}>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon sx={{ color: "white" }} />
@@ -125,6 +139,7 @@ function DesktopContactPage() {
                             <FavouriteContactCard 
                                 contacts={contactList.filter((contact) => favourite.includes(contact.id) && filterSearchHandler(contact))} 
                                 setSelectedContact={setSelectedContact}
+                                setDetailModal={openDetailCardHandler}
                             />
                         </Container>
                     </Container>
@@ -145,7 +160,7 @@ function DesktopContactPage() {
                                             contact={contact} 
                                             setFavo={addFavouriteHandler}
                                             setSelectedContact={setSelectedContact}
-                                            setDetailModal={setDetailModal}
+                                            setDetailModal={openDetailCardHandler}
                                             setDeleteModal={setDeleteModal}
                                         />
                                     </Grid>
@@ -164,20 +179,32 @@ function DesktopContactPage() {
                     )}
                 </Container>
             </Grid>
-            <Grid item sm={6}>
-                
+            <Grid item sm={6} sx={{ backgroundColor: "#1776D2" }}>
+                <Container sx={{ position:"fixed", left: { xs: "405px", md: "915px" }, padding: 4, width: "auto", display:"block:", marginTop: { xs: 8, md: 13 } }}>
+                    {createCard ? (
+                        <CreateContactModal open={createCard} setOpen={closeCreateContactCardHandler} refetch={refetch} />
+                    ) : (<></>)}
+                    {detailCard ? (
+                        <ContactDetail
+                            open={detailCard}
+                            setOpen={closeDetailCardHandler}
+                            edit={edit}
+                            setEdit={setEdit}
+                            contact={selectedContact}
+                            listFavo={favourite}
+                            setFavo={addFavouriteHandler}
+                            removeFavo={removeFavouriteHandler}
+                            refetch={refetch}
+                        />
+                    ) : (<></>)}
+                    {!createCard && !detailCard ? (
+                        <Container sx={{ marginTop: 30, marginLeft: 0, textAlign: "center", width: "auto" }}>
+                            <Typography color="rgb(255,255,255,0.75)" variant="h6">Press contact profile to see the details</Typography>
+                        </Container>
+                    ) : (<></>)}
+                </Container>
             </Grid>
-            <AddCircleIcon onClick={createContactModalHandler} color="primary" sx={{ position:'fixed', bottom: 30, right: 30, fontSize:60}} />
-            <CreateContactModal open={createModal} setOpen={createContactModalHandler} refetch={refetch} />
-            <ContactDetail
-                open={detailModal}
-                setOpen={detailModalHandler}
-                contact={selectedContact}
-                listFavo={favourite}
-                setFavo={addFavouriteHandler}
-                removeFavo={removeFavouriteHandler}
-                refetch={refetch}
-            />
+            <AddCircleIcon onClick={openCreateContactCardHandler} color="primary" sx={{ position:'fixed', bottom: 15, left: { xs: "315px", md: "685px" }, fontSize:60}} />
             <DeleteModal
                 open={deleteModal}
                 setOpen={deleteModalHandler}

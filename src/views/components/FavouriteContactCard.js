@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Grid, IconButton, Stack, Typography, Box, CardActionArea } from '@mui/material';
+import {  Grid,  Stack, Typography, Box, CardActionArea } from '@mui/material';
 
 const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) => {
     const detailModalHandler = (contact) => {
