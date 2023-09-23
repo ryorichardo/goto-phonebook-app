@@ -203,6 +203,15 @@ function ContactDetail(props) {
                                         onChange={(e) => setLastName(e.target.value)}
                                         sx={{ marginBottom: 1 }}
                                     />
+                                </Grid>
+                                <Grid item xs={1} sx={{ marginTop: 0.5, textAlign: "center" }}>
+                                    {listFavo?.includes(contact?.id)? (
+                                        <StarIcon onClick={removeFavouriteHandler} sx={{ color: 'gold' }}/>
+                                    ) : (
+                                        <StarBorderIcon onClick={setFavouriteHandler} sx={{ color: 'rgb(150, 150, 150)' }}/>
+                                    )}
+                                </Grid>
+                                <Grid item xs={12}>
                                     {phone?.map((el, index) => (
                                         <Grid container>
                                             <Grid item xs={phone.length > 1? 11 : 12}>
@@ -226,22 +235,15 @@ function ContactDetail(props) {
                                         </Grid>
                                     ))}
                                     <Grid container onClick={() => addPhoneHandler()} sx={{ width: "auto" }}>
-                                        <Grid item xs={6} sx={{ maxWidth: '105px' }}>
+                                        <Grid item sx={{ maxWidth: "100%" }}>
                                             <Typography variant="caption">
                                                 Add more Number
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={1}>
+                                        <Grid item sx={{ maxWidth: "100%" }}>
                                             <AddCircleOutlineIcon sx={{ color: 'rgb(150, 150, 150)', fontSize: 13, marginLeft: 0.25, marginTop: 0.75 }} />
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid item xs={1} sx={{ marginTop: 0.5 }}>
-                                    {listFavo?.includes(contact?.id)? (
-                                        <StarIcon onClick={removeFavouriteHandler} sx={{ color: 'gold' }}/>
-                                    ) : (
-                                        <StarBorderIcon onClick={setFavouriteHandler} sx={{ color: 'rgb(150, 150, 150)' }}/>
-                                    )}
                                 </Grid>
                             </Grid>
                         </CardContent>
@@ -259,7 +261,7 @@ function ContactDetail(props) {
                                         {contact?.first_name} {contact?.last_name}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={1} sx={{ marginTop: 0.5 }}>
+                                <Grid item xs={1} sx={{ marginTop: 0.5, textAlign: "center" }}>
                                     {listFavo?.includes(contact?.id)? (
                                         <StarIcon onClick={removeFavouriteHandler} sx={{ color: 'gold' }}/>
                                     ) : (

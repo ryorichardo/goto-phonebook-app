@@ -126,7 +126,7 @@ function ContactPage() {
                         placeholder="Search"
                         inputProps={{ 'aria-label': 'search' }}
                         onChange={(e) => setSearch(e.target.value)}
-                        sx={{ color: "white" }}
+                        sx={{ color: "white", width:"inherit" }}
                     />
                 </Search>
             </Container>
