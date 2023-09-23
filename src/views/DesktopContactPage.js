@@ -49,6 +49,12 @@ function DesktopContactPage() {
     }, [data, refetch])
 
     useEffect(() => {
+        if (search) {
+            setPage(1)
+        }
+    }, [search])
+
+    useEffect(() => {
         if (localStorage.getItem('list_favourite') && localStorage.getItem('list_favourite') !== 'undefined') {
             const list_favourite = JSON.parse(localStorage.getItem('list_favourite'))
             setFavourite(list_favourite)
@@ -135,7 +141,7 @@ function DesktopContactPage() {
                         <Container sx={{ position: "sticky", top: "125px", paddingTop:"10px", paddingLeft: "8px !important", backgroundColor: "#1776D2", zIndex: 1 }}>
                             <Typography color="white" variant="h6">Favourite contacts</Typography>
                         </Container>
-                        <Container  sx={{ padding: "0 !important", marginTop: 16 }}>
+                        <Container sx={{ padding: "0 !important", marginTop: 16, height: "100%" }}>
                             <FavouriteContactCard 
                                 contacts={contactList.filter((contact) => favourite.includes(contact.id) && filterSearchHandler(contact))} 
                                 setSelectedContact={setSelectedContact}
@@ -180,7 +186,7 @@ function DesktopContactPage() {
                 </Container>
             </Grid>
             <Grid item sm={6} sx={{ backgroundColor: "#1776D2" }}>
-                <Container sx={{ position:"fixed", left: { xs: "405px", md: "915px" }, padding: 4, width: "auto", display:"block:", marginTop: { xs: 8, md: 13 } }}>
+                <Container sx={{ position:"fixed", left: { xs: "405px", md: "555px", lg: "935px" }, padding: 4, width: "auto", display:"block:", top: "55%", transform: "translateY(-50%)" }}>
                     {createCard ? (
                         <CreateContactModal open={createCard} setOpen={closeCreateContactCardHandler} refetch={refetch} />
                     ) : (<></>)}
@@ -198,13 +204,13 @@ function DesktopContactPage() {
                         />
                     ) : (<></>)}
                     {!createCard && !detailCard ? (
-                        <Container sx={{ marginTop: 30, marginLeft: 0, textAlign: "center", width: "auto" }}>
+                        <Container sx={{ marginLeft: 0, textAlign: "center", width: "auto" }}>
                             <Typography color="rgb(255,255,255,0.75)" variant="h6">Press contact profile to see the details</Typography>
                         </Container>
                     ) : (<></>)}
                 </Container>
             </Grid>
-            <AddCircleIcon onClick={openCreateContactCardHandler} color="primary" sx={{ position:'fixed', bottom: 15, left: { xs: "315px", md: "685px" }, fontSize:60}} />
+            <AddCircleIcon onClick={openCreateContactCardHandler} color="primary" sx={{ position:'fixed', bottom: 15, left: { xs: "315px", md: "435px", lg: "685px" }, fontSize:60}} />
             <DeleteModal
                 open={deleteModal}
                 setOpen={deleteModalHandler}

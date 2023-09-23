@@ -20,7 +20,7 @@ import FavouriteContactCard from './components/FavouriteContactCard';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-        borderRadius: '15px'
+        borderRadius: '15px !important'
     }
   }));
 
@@ -53,6 +53,12 @@ function ContactPage({ search }) {
             localStorage.setItem('list_contact', JSON.stringify(data?.contact))
         }
     }, [data, refetch])
+
+    useEffect(() => {
+        if (search) {
+            setPage(1)
+        }
+    }, [search])
 
     useEffect(() => {
         if (localStorage.getItem('list_favourite') && localStorage.getItem('list_favourite') !== 'undefined') {

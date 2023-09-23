@@ -8,11 +8,11 @@ const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) 
     }
 
     return (
-        <Grid container sx={{ width: "100%", overflowX: "auto", flexWrap: "nowrap", display: "flex", marginTop: 5 }}>
+        <Grid container sx={{ width: "100%", overflowX: "auto", height: "100%", flexWrap: "nowrap", display: "flex", marginTop: 5 }}>
             {contacts.length? (
                 contacts.map(contact => (
                     <CardActionArea onClick={() => detailModalHandler(contact)} sx={{ borderRadius: 5, width: "auto" }}>
-                        <Grid item sx ={{ flex: "0 0 auto", margin: 1, marginBottom: 0, width: 100, textAlign: "center", color:"white" }}>
+                        <Grid item sx ={{ flex: "0 0 auto", margin: { xs: 1, md: 2 }, marginBottom: 0, width: 100, height: { xs: 135, md: 160 }, textAlign: "center", color:"white" }}>
                             <Stack justifyContent='center' alignContent='center'>
                                 <Box 
                                     component="img"
@@ -25,8 +25,8 @@ const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) 
                                     alt="Profile picture"
                                     src="https://i.pinimg.com/736x/2c/d0/16/2cd0166a3b2f3ae98caf92daaa075e05.jpg"
                                 />
-                                <Typography variant="caption">{contact.first_name} {contact.last_name}</Typography>
-                                <Typography variant="caption">{contact.phones[0].number}</Typography>
+                                <Typography variant="caption" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.first_name} {contact.last_name}</Typography>
+                                <Typography variant="caption" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.phones[0].number}</Typography>
                                 {contact.phones.length > 1 ? (
                                     <Typography variant="caption"><b>+{contact.phones.length-1} more</b></Typography>
                                 ) : (
