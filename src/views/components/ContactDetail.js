@@ -248,6 +248,9 @@ function ContactDetail(props) {
                                                     value={el}
                                                     onChange={(event) => changePhoneHandler(index, event)}
                                                     sx={{ marginBottom: 1 }}
+                                                    InputProps={{
+                                                        inputProps: { min: 0 }
+                                                    }}
                                                 />
                                             </Grid>
                                             {phone.length > 1? (

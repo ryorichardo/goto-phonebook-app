@@ -125,6 +125,9 @@ function CreateContactModal(props) {
                                     variant="standard"
                                     value={el.number}
                                     onChange={(event) => changePhoneHandler(index, event)}
+                                    InputProps={{
+                                        inputProps: { min: 0 }
+                                    }}
                                 />
                             </Grid>
                             {phone.length > 1? (
