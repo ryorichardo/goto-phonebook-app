@@ -7,6 +7,10 @@
   pointer-events: none;
 }
 
+.css-uhb5lp {
+  border-radius: 15px;
+}
+
 .MuiCard-root::-webkit-scrollbar {
   display: none;
 }
