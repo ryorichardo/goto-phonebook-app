@@ -9,6 +9,7 @@ import { Card, CardMedia, Grid, Typography } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import { useEffect } from 'react';
 import ADD_CONTACT_WITH_PHONES from '../../api/addContactWithPhones';
 import GET_CONTACT_LIST from '../../api/getContactList';
 
@@ -17,6 +18,9 @@ function CreateContactModal(props) {
     const [firstName, setFirstName] = useState()
     const [lastName, setLastName] = useState()
     const [phone, setPhone] = useState([{number: ''}])
+    const [helperFirstName, setHelperFirstName] = useState('')
+    const [helperLastName, setHelperLastName] = useState('')
+
     const [createContact] = useMutation(ADD_CONTACT_WITH_PHONES, {
         onComplete: () => {
             refetch()
@@ -60,6 +64,22 @@ function CreateContactModal(props) {
         setOpen()
     }
 
+    useEffect(() =>  {
+        if (firstName?.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
+            setHelperFirstName("Contact name can not include special characters")
+        } else {
+            setHelperFirstName("")
+        }
+    }, [firstName])
+
+    useEffect(() =>  {
+        if (lastName?.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
+            setHelperLastName("Contact name can not include special characters")
+        } else {
+            setHelperLastName("")
+        }
+    }, [lastName])
+
     return (
             <Card sx={{ width: { xs: 300, md: 400 }, overflowY: "scroll", borderRadius: "15px", maxHeight: { xs: "500px" } }}>
                 <CardMedia
@@ -69,7 +89,7 @@ function CreateContactModal(props) {
                     image="https://i.pinimg.com/736x/2c/d0/16/2cd0166a3b2f3ae98caf92daaa075e05.jpg"
                 />
                 <DialogTitle  sx={{ paddingBottom: 0 }}>Create new contact</DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{ paddingBottom: 0 }}>
                     <TextField
                         autoFocus
                         required
@@ -78,6 +98,7 @@ function CreateContactModal(props) {
                         type="string"
                         fullWidth
                         variant="standard"
+                        helperText={helperFirstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         sx={{ marginBottom: 1 }}
                     />
@@ -88,6 +109,7 @@ function CreateContactModal(props) {
                         type="string"
                         fullWidth
                         variant="standard"
+                        helperText={helperLastName}
                         onChange={(e) => setLastName(e.target.value)}
                         sx={{ marginBottom: 1 }}
                     />
@@ -98,7 +120,7 @@ function CreateContactModal(props) {
                                     required
                                     id={index}
                                     label="Phone Number"
-                                    type="string"
+                                    type="number"
                                     fullWidth
                                     variant="standard"
                                     value={el.number}
@@ -112,13 +134,13 @@ function CreateContactModal(props) {
                             ) : (<></>)}
                         </Grid>
                     ))}
-                    <Grid container onClick={() => addPhoneHandler()} sx={{ width: "auto" }}>
-                        <Grid item xs={5}>
-                            <Typography variant="caption">
+                    <Grid container onClick={() => addPhoneHandler()} sx={{ marginTop: 1 }}>
+                        <Grid item>
+                            <Typography variant="caption" sx={{ width: "100%" }}>
                                 Add more Number
                             </Typography>
                         </Grid>
-                        <Grid item xs={1}>
+                        <Grid item>
                             <AddCircleOutlineIcon sx={{ color: 'rgb(150, 150, 150)', fontSize: 13, marginLeft: 0.25, marginTop: 0.75 }} />
                         </Grid>
                     </Grid>

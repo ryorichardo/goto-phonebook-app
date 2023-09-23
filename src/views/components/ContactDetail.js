@@ -5,7 +5,9 @@ import StarIcon from '@mui/icons-material/Star';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import PhoneIcon from '@mui/icons-material/Phone';
 import React from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import DeleteModal from './DeleteModal';
 import { useMutation } from '@apollo/client';
@@ -21,11 +23,14 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 function ContactDetail(props) {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const { open, setOpen, edit, setEdit, contact, listFavo, setFavo, removeFavo, refetch } = props;
+    const { setOpen, edit, setEdit, contact, listFavo, setFavo, removeFavo, refetch } = props;
     const [deleteModal, setDeleteModal] = useState(false);
     const [firstName, setFirstName] = useState(contact?.first_name)
     const [lastName, setLastName] = useState(contact?.last_name)
     const [phone, setPhone] = useState(contact?.phones.map((el) => { return el.number }))
+    const [helperFirstName, setHelperFirstName] = useState('')
+    const [helperLastName, setHelperLastName] = useState('')
+
     const [editContact] = useMutation(EDIT_CONTACT, {
         onComplete: () => {
             refetch()
@@ -77,6 +82,22 @@ function ContactDetail(props) {
     const arraysEqual = (a1, a2) => {
         return (a1.length === a2.length && a1.every((el, idx) => el.number === a2[idx]));
     }
+
+    useEffect(() =>  {
+        if (firstName.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
+            setHelperFirstName("Contact name can not include special characters")
+        } else {
+            setHelperFirstName("")
+        }
+    }, [firstName])
+
+    useEffect(() =>  {
+        if (lastName.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
+            setHelperLastName("Contact name can not include special characters")
+        } else {
+            setHelperLastName("")
+        }
+    }, [lastName])
 
     const editContactHandler = () => {
         if (firstName !== contact.first_name || lastName !== contact.last_name ) {
@@ -177,7 +198,7 @@ function ContactDetail(props) {
                 )}
                 {edit? (
                     <>
-                        <CardContent>
+                        <CardContent sx={{ paddingBottom: 0 }}>
                             <Grid container>
                                 <Grid item xs={11}>
                                     <TextField
@@ -189,6 +210,7 @@ function ContactDetail(props) {
                                         fullWidth
                                         variant="standard"
                                         defaultValue={firstName}
+                                        helperText={helperFirstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         sx={{ marginBottom: 1 }}
                                     />
@@ -200,6 +222,7 @@ function ContactDetail(props) {
                                         fullWidth
                                         variant="standard"
                                         defaultValue={lastName}
+                                        helperText={helperLastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         sx={{ marginBottom: 1 }}
                                     />
@@ -219,7 +242,7 @@ function ContactDetail(props) {
                                                     required
                                                     id={index}
                                                     label="Phone Number"
-                                                    type="string"
+                                                    type="number"
                                                     fullWidth
                                                     variant="standard"
                                                     value={el}
@@ -234,13 +257,13 @@ function ContactDetail(props) {
                                             ) : (<></>)}
                                         </Grid>
                                     ))}
-                                    <Grid container onClick={() => addPhoneHandler()} sx={{ width: "auto" }}>
-                                        <Grid item sx={{ maxWidth: "100%" }}>
-                                            <Typography variant="caption">
+                                    <Grid container onClick={() => addPhoneHandler()}>
+                                        <Grid item>
+                                            <Typography variant="caption" sx={{ width: "100%" }}>
                                                 Add more Number
                                             </Typography>
                                         </Grid>
-                                        <Grid item sx={{ maxWidth: "100%" }}>
+                                        <Grid item>
                                             <AddCircleOutlineIcon sx={{ color: 'rgb(150, 150, 150)', fontSize: 13, marginLeft: 0.25, marginTop: 0.75 }} />
                                         </Grid>
                                     </Grid>
@@ -254,7 +277,7 @@ function ContactDetail(props) {
                     </>
                 ) : (
                     <>
-                        <CardContent>
+                        <CardContent sx={{ paddingBottom: 0 }}>
                             <Grid container>
                                 <Grid item xs={11}>
                                     <Typography gutterBottom variant="h5" component="div">
@@ -269,9 +292,10 @@ function ContactDetail(props) {
                                     )}
                                 </Grid>
                             </Grid>
-                            <List>
+                            <List sx={{ padding: 0 }}>
                                 {contact?.phones?.map((value) => (
                                     <ListItem sx={{ paddingLeft: 0 }}>
+                                        <PhoneIcon sx={{ color: 'rgb(150, 150, 150)', fontSize: 20, marginRight: 1 }} />
                                         <Typography variant="body2" sx={{ fontWeight: 'normal' }}>
                                             {value.number}
                                         </Typography>
