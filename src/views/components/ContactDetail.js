@@ -15,6 +15,7 @@ import ADD_NUMBER_TO_CONTACT from '../../api/addNumberToContact';
 import GET_CONTACT_LIST from '../../api/getContactList';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 
 function ContactDetail(props) {
@@ -141,6 +142,7 @@ function ContactDetail(props) {
 
     return (
         <>
+            <ClickAwayListener onClickAway={() => setEdit(false)}>
             <Card sx={{ width: { xs: 300, md: 400 }, overflowY: "scroll", borderRadius: "15px", maxHeight: { xs: "500px" } }}>
                 <CardMedia
                     component="img"
@@ -281,8 +283,8 @@ function ContactDetail(props) {
                         </DialogActions>
                     </>
                 )}
-            
             </Card>
+            </ClickAwayListener>
             <DeleteModal
                     open={deleteModal}
                     setOpen={deleteModalHandler}

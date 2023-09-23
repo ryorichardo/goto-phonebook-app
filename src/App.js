@@ -1,13 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 
 import { AppBar, Typography, Container } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import ContactPage from './views/ContactPage';
 import DesktopContactPage from './views/DesktopContactPage';
-import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -46,7 +43,6 @@ export const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function App() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const [search, setSearch] = useState()
 
     return (
         <div className="App">
@@ -64,22 +60,12 @@ function App() {
             ) : (
                 <>
                     <AppBar position="fixed" sx={{ backgroundColor:"primary", padding:'20px', paddingLeft:'32px', paddingRight:'32px' }}>
-                        <Typography variant="h5" color="white" component="div" sx={{ textAlign: 'center', marginBottom: 1 }}>
+                        <Typography variant="h5" color="white" component="div" sx={{ textAlign: 'center' }}>
                             Phonebook App
                         </Typography>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search"
-                                inputProps={{ 'aria-label': 'search' }}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </Search>
                     </AppBar>
-                    <Container sx={{ marginTop: 10, padding: 0 }}>
-                        <ContactPage search={search} />
+                    <Container sx={{ marginTop: 10, padding: 0, marginBottom: 1 }}>
+                        <ContactPage />
                     </Container>
                 </>
 

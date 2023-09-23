@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 
 import { Card, Container, Grid, Stack, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import SearchIcon from '@mui/icons-material/Search';
 import { gridSpacing } from '../configs/constant';
 
@@ -121,7 +121,7 @@ function DesktopContactPage() {
     }
 
     return (
-        <Grid container sx={{ padding: "0 !important" }}>
+        <Grid container sx={{ padding: "0 !important", minHeight:"100vh" }}>
             <Grid item sm={6}>
                 <Container sx={{ width: "50% !important", position: "fixed", top: "70px", zIndex: 2, backgroundColor: "#1776D2", padding: 2 }}>
                     <Search>
@@ -186,7 +186,7 @@ function DesktopContactPage() {
                 </Container>
             </Grid>
             <Grid item sm={6} sx={{ backgroundColor: "#1776D2" }}>
-                <Container sx={{ position:"fixed", left: { xs: "405px", md: "555px", lg: "935px" }, padding: 4, width: "auto", display:"block:", top: "55%", transform: "translateY(-50%)" }}>
+                <Container sx={{ position:"fixed", padding: 4, width: "auto", display:"block:", left: "75%", top: "55%", transform: "translate(-50%, -50%)" }}>
                     {createCard ? (
                         <CreateContactModal open={createCard} setOpen={closeCreateContactCardHandler} refetch={refetch} />
                     ) : (<></>)}
@@ -204,13 +204,13 @@ function DesktopContactPage() {
                         />
                     ) : (<></>)}
                     {!createCard && !detailCard ? (
-                        <Container sx={{ marginLeft: 0, textAlign: "center", width: "auto" }}>
+                        <Container sx={{ marginLeft: 0, textAlign: "center", width: { xs: 300, md: 400 } }}>
                             <Typography color="rgb(255,255,255,0.75)" variant="h6">Press contact profile to see the details</Typography>
                         </Container>
                     ) : (<></>)}
                 </Container>
             </Grid>
-            <AddCircleIcon onClick={openCreateContactCardHandler} color="primary" sx={{ position:'fixed', bottom: 15, left: { xs: "315px", md: "435px", lg: "685px" }, fontSize:60}} />
+            <AddCircleRoundedIcon onClick={openCreateContactCardHandler} color="primary" sx={{ backgroundColor: "white", borderRadius: 40, position:'fixed', bottom: 15, left: { xs: "40%", md: "41%", lg: "45%" }, fontSize:60}} />
             <DeleteModal
                 open={deleteModal}
                 setOpen={deleteModalHandler}

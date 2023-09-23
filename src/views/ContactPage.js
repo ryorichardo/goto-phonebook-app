@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
 
 import { Card, Container, Grid, Stack, Typography } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import SearchIcon from '@mui/icons-material/Search';
 import { gridSpacing } from '../configs/constant';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
@@ -17,6 +17,8 @@ import ContactDetail from './components/ContactDetail';
 import DeleteModal from './components/DeleteModal';
 import FavouriteContactCard from './components/FavouriteContactCard';
 
+import { Search, SearchIconWrapper, StyledInputBase } from '../App';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
@@ -24,7 +26,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     }
   }));
 
-function ContactPage({ search }) {
+function ContactPage() {
 
     const { data, refetch } = useQuery(GET_CONTACT_LIST);
 
@@ -36,6 +38,7 @@ function ContactPage({ search }) {
     const [detailModal, setDetailModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
     const [edit, setEdit] = useState(false);
+    const [search, setSearch] = useState()
 
     useEffect(() => {
         if (localStorage.getItem('list_contact') && localStorage.getItem('list_contact') !== 'undefined') {
@@ -114,9 +117,22 @@ function ContactPage({ search }) {
 
     return (
         <>
+            <Container sx={{ position: "fixed", top: "70px", zIndex: 2, backgroundColor: "#1776D2", padding: 2 }}>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon sx={{ color: "white" }} />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                        placeholder="Search"
+                        inputProps={{ 'aria-label': 'search' }}
+                        onChange={(e) => setSearch(e.target.value)}
+                        sx={{ color: "white" }}
+                    />
+                </Search>
+            </Container>
             {contactList?.filter((contact) => favourite.includes(contact.id)).length > 0? (
                 <Container sx={{ backgroundColor: "#1776D2" }}>
-                    <Container sx={{ position: "sticky", top: "115px", paddingTop:"10px", backgroundColor: "#1776D2", zIndex: 1 }}>
+                    <Container sx={{ position: "sticky", top: "125px", paddingTop:"10px", backgroundColor: "#1776D2", zIndex: 1 }}>
                         <Typography color="white" variant="h6">Favourite contacts</Typography>
                     </Container>
                     <FavouriteContactCard 
@@ -126,7 +142,7 @@ function ContactPage({ search }) {
                     />
                 </Container>
             ) : (<></>)}
-            <Container sx={{ position: "sticky", top: "115px", paddingTop:"10px", paddingLeft: 0, paddingRight: 0, backgroundColor: "#1776D2", zIndex: 1 }}>
+            <Container sx={{ position: "sticky", top: "125px", paddingTop:"10px", paddingLeft: 0, paddingRight: 0, backgroundColor: "#1776D2", zIndex: 1 }}>
                 <Typography color="white" variant="h6" sx={{ paddingLeft: "32px" }}>Contacts</Typography>
                 <Container sx ={{ backgroundColor: "#fafafa", height: "30px", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}></Container>
             </Container>
@@ -160,7 +176,7 @@ function ContactPage({ search }) {
                     <Typography color="primary" variant="h6" sx={{ textAlign: "center", margin: "auto", marginTop: "25vh" }}>No regular contacts</Typography>
                 )}
             </Container>
-            <AddCircleIcon onClick={createContactModalHandler} color="primary" sx={{ position:'fixed', bottom: 30, right: 30, fontSize:60}} />
+            <AddCircleRoundedIcon onClick={createContactModalHandler} color="primary" sx={{ backgroundColor: "white", borderRadius: 40, position:'fixed', bottom: 30, right: 30, fontSize:60}} />
             <BootstrapDialog open={createModal} onClose={createContactModalHandler}>
                 <CreateContactModal open={createModal} setOpen={createContactModalHandler} refetch={refetch} />
             </BootstrapDialog>
