@@ -146,7 +146,7 @@ function ContactPage() {
                 <Typography color="white" variant="h6" sx={{ paddingLeft: "32px" }}>Contacts</Typography>
                 <Container sx ={{ backgroundColor: "#fafafa", height: "30px", borderTopLeftRadius: 30, borderTopRightRadius: 30 }}></Container>
             </Container>
-            <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2, marginTop: contactList?.filter((contact) => favourite.includes(contact.id)).length ? 0 : 4, minHeight: "45vh" }}>
+            <Container sx={{ backgroundColor: "#fafafa", paddingBottom: 2, marginTop: contactList?.filter((contact) => favourite.includes(contact.id)).length ? 0 : 7, minHeight: "45vh" }}>
                 {contactList?.filter((contact) => !favourite.includes(contact.id) && filterSearchHandler(contact)).length > 0? (
                     <>
                         <Grid container spacing={gridSpacing}>
