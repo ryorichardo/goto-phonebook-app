@@ -115,57 +115,59 @@ function ContactDetail(props: {
     }, [firstName, lastName, firstNames, lastNames])
 
     const editContactHandler = () => {
-        if (firstName !== contact.first_name || lastName !== contact.last_name ) {
-            editContact({
-                variables: {
-                    id: contact.id,
-                    _set: {
-                        first_name: firstName,
-                        last_name: lastName,
-                    }
-                },
-                refetchQueries: [{
-                    query: GET_CONTACT_LIST,
-                }],
-            })
-        } 
-
-        if (!arraysEqual(phone, contact.phones)) {
-            contact.phones.forEach((_, idx) => {
-                if (contact.phones[idx].number !== phone[idx] && idx < phone.length) {
-                    editPhone({
-                        variables: {
-                            pk_columns: {
-                                number: contact.phones[idx].number,
-                                contact_id: contact.id
-                            },
-                            new_phone_number: phone[idx]
-                        },
-                        refetchQueries: [{
-                            query: GET_CONTACT_LIST,
-                            // awaitRefetchQueries: true,
-                        }],
-                    })
-                }
-            })
-        }
-
-        if (phone.length > contact.phones.length) {
-            for (let i = contact.phones.length; i < phone.length; i++) {
-                addPhone({
+        if (helperFirstName.length === 0 && helperLastName.length === 0) {
+            if (firstName !== contact.first_name || lastName !== contact.last_name ) {
+                editContact({
                     variables: {
-                            contact_id: contact.id,
-                            phone_number: phone[i]
+                        id: contact.id,
+                        _set: {
+                            first_name: firstName,
+                            last_name: lastName,
+                        }
                     },
                     refetchQueries: [{
                         query: GET_CONTACT_LIST,
                     }],
                 })
+            } 
+    
+            if (!arraysEqual(phone, contact.phones)) {
+                contact.phones.forEach((_, idx) => {
+                    if (contact.phones[idx].number !== phone[idx] && idx < phone.length) {
+                        editPhone({
+                            variables: {
+                                pk_columns: {
+                                    number: contact.phones[idx].number,
+                                    contact_id: contact.id
+                                },
+                                new_phone_number: phone[idx]
+                            },
+                            refetchQueries: [{
+                                query: GET_CONTACT_LIST,
+                                // awaitRefetchQueries: true,
+                            }],
+                        })
+                    }
+                })
             }
+    
+            if (phone.length > contact.phones.length) {
+                for (let i = contact.phones.length; i < phone.length; i++) {
+                    addPhone({
+                        variables: {
+                                contact_id: contact.id,
+                                phone_number: phone[i]
+                        },
+                        refetchQueries: [{
+                            query: GET_CONTACT_LIST,
+                        }],
+                    })
+                }
+            }
+    
+            setEdit(false)
+            setOpen()
         }
-
-        setEdit(false)
-        setOpen()
     }
 
     const setClose = () => {

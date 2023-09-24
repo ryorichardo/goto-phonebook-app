@@ -30,18 +30,20 @@ function CreateContactModal(props: { setOpen: () => void, refetch: () => void, l
     }});
 
     const createContactHandler = () => {
-        createContact({
-            variables: {
-                first_name: firstName,
-                last_name: lastName,
-                phones: phone.filter(el => el.number !== "0")
-            },
-            refetchQueries: [{
-                query: GET_CONTACT_LIST,
-                // awaitRefetchQueries: true,
-            }],
-        })
-        closeModalHandler()
+        if (helperFirstName.length === 0 && helperLastName.length === 0) {
+            createContact({
+                variables: {
+                    first_name: firstName,
+                    last_name: lastName,
+                    phones: phone.filter(el => el.number !== "0")
+                },
+                refetchQueries: [{
+                    query: GET_CONTACT_LIST,
+                    // awaitRefetchQueries: true,
+                }],
+            })
+            closeModalHandler()
+        }
     }
 
     const changePhoneHandler = (index: number, event: any) => {
