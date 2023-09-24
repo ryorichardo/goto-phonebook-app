@@ -23,7 +23,7 @@
     "react-native-web": "^0.19.8",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
-    "typescript": "^5.2.2",
+    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -55,9 +55,9 @@
   },
   "jest": {
     "coverageThreshold": {
-        "global": {
-            "lines": 80
-        }
+      "global": {
+        "lines": 80
+      }
     }
-}
+  }
 }
