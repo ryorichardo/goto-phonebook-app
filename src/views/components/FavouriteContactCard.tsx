@@ -1,8 +1,23 @@
 import React from 'react';
 import {  Grid,  Stack, Typography, Box, CardActionArea } from '@mui/material';
+import { contact } from '../../configs/constant';
 
-const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) => {
-    const detailModalHandler = (contact) => {
+// interface contact {
+//     id: number,
+//     first_name: string,
+//     last_name: string,
+//     phones: { number: string }[]
+// }
+
+// interface arrayContact extends Array<contact>{}
+interface IFavouriteContactCard {
+    contacts: contact[],
+    setSelectedContact: React.Dispatch<React.SetStateAction<contact>>,
+    setDetailModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function FavouriteContactCard({ contacts, setSelectedContact, setDetailModal }: IFavouriteContactCard) {
+    const detailModalHandler = (contact: contact) => {
         setSelectedContact(contact)
         setDetailModal(current => !current)
     }
@@ -36,7 +51,7 @@ const FavouriteContactCard = ({ contacts, setSelectedContact, setDetailModal }) 
                         </Grid>
                     </CardActionArea>
             ))) : (
-                <Typography color="white" variant="h7" sx={{ textAlign: "center", margin: "auto", marginTop: 1.5 }}>No favourite contacts</Typography>
+                <Typography color="white" variant="h6" sx={{ textAlign: "center", margin: "auto", marginTop: 1.5 }}>No favourite contacts</Typography>
             )}
         </Grid>            
     );

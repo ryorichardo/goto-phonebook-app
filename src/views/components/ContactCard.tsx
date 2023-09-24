@@ -3,16 +3,23 @@ import { Card, Grid, Stack, Typography, Box, CardActionArea, Popper, Fade, Paper
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useState } from 'react';
+import React from 'react';
+import { contact } from '../../configs/constant';
 
 // import ModalConfirm from 'components/ModalConfirm';
 
 
-function ContactCard({ contact, setSelectedContact, setDetailModal, setDeleteModal, setFavo }) {
-
+function ContactCard(props: { 
+    contact: contact, 
+    setSelectedContact: React.Dispatch<React.SetStateAction<contact>>, 
+    setDetailModal: React.Dispatch<React.SetStateAction<boolean>>,
+    setDeleteModal: React.Dispatch<React.SetStateAction<boolean>>,
+    setFavo: (id: number) => void }) {
+    const { contact, setSelectedContact, setDetailModal, setDeleteModal, setFavo } = props
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
-  
-    const handlePopper = () => (event) => {
+
+    const handlePopper = () => (event: any) => {
       setAnchorEl(event.currentTarget);
       setOpen(current => !current);
     };

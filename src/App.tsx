@@ -7,6 +7,7 @@ import ContactPage from './views/ContactPage';
 import DesktopContactPage from './views/DesktopContactPage';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import React from 'react';
 
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -49,8 +50,8 @@ function App() {
             { matches? (
                 <>
                     <AppBar position="fixed" sx={{ backgroundColor:"primary", padding:'20px' }}>
-                        <Typography variant="h5" color="white" component="div" sx={{ textAlign: 'center' }}>
-                            Phonebook App
+                        <Typography variant="h4" color="white" component="div" sx={{ textAlign: 'center', fontFamily: 'Bauhaus Modern, sans-serif' }}>
+                            Gocontact
                         </Typography>
                     </AppBar>
                     <Container sx={{ padding: "0 !important", margin: 0, maxWidth:"100vw !important" }}>
@@ -60,8 +61,8 @@ function App() {
             ) : (
                 <>
                     <AppBar position="fixed" sx={{ backgroundColor:"primary", padding:'20px', paddingLeft:'32px', paddingRight:'32px' }}>
-                        <Typography variant="h5" color="white" component="div" sx={{ textAlign: 'center' }}>
-                            Phonebook App
+                        <Typography variant="h4" color="white" component="div" sx={{ textAlign: 'center' }}>
+                            Gocontact
                         </Typography>
                     </AppBar>
                     <Container sx={{ marginTop: 10, padding: 0, marginBottom: 1 }}>

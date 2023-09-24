@@ -18,29 +18,41 @@ import GET_CONTACT_LIST from '../../api/getContactList';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { contact } from '../../configs/constant.js';
 
 
-function ContactDetail(props) {
+function ContactDetail(props: { 
+    setOpen: () => void, 
+    edit: boolean,
+    setEdit: React.Dispatch<React.SetStateAction<boolean>>,
+    contact: contact,
+    listFavo: number[],
+    setFavo: (id: number) => void,
+    removeFavo: (id: number) => void,
+    refetch: () => void,
+    listContact: contact[] }) {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const { setOpen, edit, setEdit, contact, listFavo, setFavo, removeFavo, refetch } = props;
+    const { setOpen, edit, setEdit, contact, listFavo, setFavo, removeFavo, refetch, listContact } = props;
     const [deleteModal, setDeleteModal] = useState(false);
     const [firstName, setFirstName] = useState(contact?.first_name)
     const [lastName, setLastName] = useState(contact?.last_name)
     const [phone, setPhone] = useState(contact?.phones.map((el) => { return el.number }))
     const [helperFirstName, setHelperFirstName] = useState('')
     const [helperLastName, setHelperLastName] = useState('')
+    const firstNames = listContact.map((e: contact) => e.first_name.toLowerCase()).filter((name: string) => name !== contact?.first_name)
+    const lastNames = listContact.map((e: contact) => e.last_name.toLowerCase()).filter((name: string) => name !== contact?.first_name)
 
     const [editContact] = useMutation(EDIT_CONTACT, {
-        onComplete: () => {
+        onCompleted: () => {
             refetch()
     }});
     const [editPhone] = useMutation(EDIT_PHONE_NUMBER, {
-        onComplete: () => {
+        onCompleted: () => {
             refetch()
     }});
     const [addPhone] = useMutation(ADD_NUMBER_TO_CONTACT, {
-        onComplete: () => {
+        onCompleted: () => {
             refetch()
     }});
 
@@ -52,7 +64,7 @@ function ContactDetail(props) {
         setFirstName(contact?.first_name)
         setLastName(contact?.last_name)
         setPhone(contact?.phones.map((el) => { return el.number }))
-        setEdit(current => !current)
+        setEdit((current: boolean) => !current)
     }
 
     const setFavouriteHandler = () => {
@@ -63,7 +75,7 @@ function ContactDetail(props) {
         removeFavo(contact.id)
     }
 
-    const changePhoneHandler = (index, event) => {
+    const changePhoneHandler = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const values = [...phone];
         values[index] = event.target.value;
         setPhone(values);
@@ -73,31 +85,34 @@ function ContactDetail(props) {
         setPhone([...phone, '']);
     };
 
-    const removePhoneHandler = (index) => {
+    const removePhoneHandler = (index: number) => {
         const values = [...phone];
         values.splice(index, 1);
         setPhone(values);
     };
 
-    const arraysEqual = (a1, a2) => {
-        return (a1.length === a2.length && a1.every((el, idx) => el.number === a2[idx]));
+    const arraysEqual = (a1: Array<any>, a2: Array<any>) => {
+        return (a1.length === a2.length && a1.every((el: any, idx: number) => el.number === a2[idx]));
     }
 
-    useEffect(() =>  {
-        if (firstName.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
-            setHelperFirstName("Contact name can not include special characters")
+    useEffect(() => {
+        if (firstNames.includes(firstName.toLowerCase()) && lastNames.includes(lastName.toLowerCase())) {
+            setHelperFirstName("Contact name already exist")
+            setHelperLastName("Contact name already exist")
         } else {
-            setHelperFirstName("")
-        }
-    }, [firstName])
+            if (lastName?.match(/[0-9!@#$%^&*)(+=._-]/g)) {
+                setHelperLastName("Contact name can not include special characters")
+            } else {
+                setHelperLastName("")
+            }
 
-    useEffect(() =>  {
-        if (lastName.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
-            setHelperLastName("Contact name can not include special characters")
-        } else {
-            setHelperLastName("")
+            if (firstName?.match(/[0-9!@#$%^&*)(+=._-]/g)) {
+                setHelperFirstName("Contact name can not include special characters")
+            } else {
+                setHelperFirstName("")
+            }
         }
-    }, [lastName])
+    }, [firstName, lastName, firstNames, lastNames])
 
     const editContactHandler = () => {
         if (firstName !== contact.first_name || lastName !== contact.last_name ) {
@@ -111,14 +126,13 @@ function ContactDetail(props) {
                 },
                 refetchQueries: [{
                     query: GET_CONTACT_LIST,
-                    awaitRefetchQueries: true,
                 }],
             })
         } 
 
         if (!arraysEqual(phone, contact.phones)) {
             contact.phones.forEach((_, idx) => {
-                if (contact.phones[idx].number !== phone[idx]) {
+                if (contact.phones[idx].number !== phone[idx] && idx < phone.length) {
                     editPhone({
                         variables: {
                             pk_columns: {
@@ -129,7 +143,7 @@ function ContactDetail(props) {
                         },
                         refetchQueries: [{
                             query: GET_CONTACT_LIST,
-                            awaitRefetchQueries: true,
+                            // awaitRefetchQueries: true,
                         }],
                     })
                 }
@@ -145,7 +159,6 @@ function ContactDetail(props) {
                     },
                     refetchQueries: [{
                         query: GET_CONTACT_LIST,
-                        awaitRefetchQueries: true,
                     }],
                 })
             }
@@ -240,7 +253,7 @@ function ContactDetail(props) {
                                             <Grid item xs={phone.length > 1? 11 : 12}>
                                                 <TextField
                                                     required
-                                                    id={index}
+                                                    id={index.toString()}
                                                     label="Phone Number"
                                                     type="number"
                                                     fullWidth
@@ -318,6 +331,7 @@ function ContactDetail(props) {
                     open={deleteModal}
                     setOpen={deleteModalHandler}
                     contact={contact}
+                    refetch={refetch}
             />
         </>
     )

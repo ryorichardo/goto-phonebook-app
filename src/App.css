@@ -25,6 +25,22 @@ input[type=number]::-webkit-outer-spin-button {
   display: none;
 }
 
+.css-h1jlwm-MuiPaper-root-MuiAppBar-root {
+  box-shadow: none !important;
+}
+
+.css-voufco-MuiPaper-root-MuiAppBar-root {
+  box-shadow: none !important;
+}
+
+.css-6a1jv0-MuiTypography-root {
+  font-family: 'Bauhaus Modern', sans-serif !important;
+}
+
+.css-1bjxvhq-MuiTypography-root {
+  font-family: 'Bauhaus Modern', sans-serif !important;
+}
+
 .App {
   ::-webkit-scrollbar {
     width: 3px;

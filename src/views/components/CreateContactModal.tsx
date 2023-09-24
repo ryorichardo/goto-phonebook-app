@@ -12,17 +12,20 @@ import { useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 import ADD_CONTACT_WITH_PHONES from '../../api/addContactWithPhones';
 import GET_CONTACT_LIST from '../../api/getContactList';
+import { contact } from '../../configs/constant';
 
-function CreateContactModal(props) {
-    const { setOpen, refetch } = props;
-    const [firstName, setFirstName] = useState()
-    const [lastName, setLastName] = useState()
+function CreateContactModal(props: { setOpen: () => void, refetch: () => void, listContact: contact[] }) {
+    const { setOpen, refetch, listContact } = props;
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [phone, setPhone] = useState([{number: ''}])
     const [helperFirstName, setHelperFirstName] = useState('')
     const [helperLastName, setHelperLastName] = useState('')
+    const firstNames = listContact.map((e: contact) => e.first_name.toLowerCase())
+    const lastNames = listContact.map((e: contact) => e.last_name.toLowerCase())
 
     const [createContact] = useMutation(ADD_CONTACT_WITH_PHONES, {
-        onComplete: () => {
+        onCompleted: () => {
             refetch()
     }});
 
@@ -31,17 +34,17 @@ function CreateContactModal(props) {
             variables: {
                 first_name: firstName,
                 last_name: lastName,
-                phones: phone.filter(el => el.number !== 0)
+                phones: phone.filter(el => el.number !== "0")
             },
             refetchQueries: [{
                 query: GET_CONTACT_LIST,
-                awaitRefetchQueries: true,
+                // awaitRefetchQueries: true,
             }],
         })
         closeModalHandler()
     }
 
-    const changePhoneHandler = (index, event) => {
+    const changePhoneHandler = (index: number, event: any) => {
         const values = [...phone];
         values[index].number = event.target.value;
         setPhone(values);
@@ -51,7 +54,7 @@ function CreateContactModal(props) {
         setPhone([...phone, { number: '' }]);
     };
 
-    const removePhoneHandler = (index) => {
+    const removePhoneHandler = (index: number) => {
         const values = [...phone];
         values.splice(index, 1);
         setPhone(values);
@@ -64,21 +67,24 @@ function CreateContactModal(props) {
         setOpen()
     }
 
-    useEffect(() =>  {
-        if (firstName?.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
-            setHelperFirstName("Contact name can not include special characters")
+    useEffect(() => {
+        if (firstNames.includes(firstName.toLowerCase()) && lastNames.includes(lastName.toLowerCase())) {
+            setHelperFirstName("Contact name already exist")
+            setHelperLastName("Contact name already exist")
         } else {
-            setHelperFirstName("")
-        }
-    }, [firstName])
+            if (lastName?.match(/[0-9!@#$%^&*)(+=._-]/g)) {
+                setHelperLastName("Contact name can not include special characters")
+            } else {
+                setHelperLastName("")
+            }
 
-    useEffect(() =>  {
-        if (lastName?.match(/[0-9!@#\$%\^\&*\)\(+=._-]/g)) {
-            setHelperLastName("Contact name can not include special characters")
-        } else {
-            setHelperLastName("")
+            if (firstName?.match(/[0-9!@#$%^&*)(+=._-]/g)) {
+                setHelperFirstName("Contact name can not include special characters")
+            } else {
+                setHelperFirstName("")
+            }
         }
-    }, [lastName])
+    }, [firstName, lastName, firstNames, lastNames])
 
     return (
             <Card sx={{ width: { xs: 300, md: 400 }, overflowY: "scroll", borderRadius: "15px", maxHeight: { xs: "500px" } }}>
@@ -118,7 +124,7 @@ function CreateContactModal(props) {
                             <Grid item xs={phone.length > 1? 11 : 12}>
                                 <TextField
                                     required
-                                    id={index}
+                                    id={index.toString()}
                                     label="Phone Number"
                                     type="number"
                                     fullWidth
