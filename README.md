@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+<h1 align="center">
+  Gocontact
+  <br>
+</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#how-to-use">How To Use</a> 
+</p>
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+* Contact List Page
+Users can:
+    - See up to 10 contacts each page with contact first name, last name, and phone  number
+    - Search contact using first name or last name
+    - Add contact to favourite list
+    - View favourite contacts on the top of the page
+    - Create new contact by pressing the plus icon
+    - Delete existing contact
 
-### `npm start`
+* Contact Details Page
+Users can:
+    - View contact first name, last name, and list of phone numbers
+    - Add contact to  favourite list
+    - Edit contact first name, last name, or phone number
+    - Add new phone number to selected contact
+    - Delete existing contact
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* Create New Contact Page
+Users can:
+    - Add contact first name and last name
+    - Add multiple phone numbers
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## How To Use
 
-### `npm test`
+Software requirements:
+- [Git](https://git-scm.com)
+- [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com))
+- Web browser (suggested: Chrome)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Then, do these command on your terminal:
+```bash
+# Clone this repository
+$ git clone https://github.com/ryorichardo/goto-phonebook-app
 
-### `npm run build`
+# Go into the repository
+$ cd goto-phonebook-app
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Install dependencies
+$ npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Run the app in development server
+$ npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Open [http://localhost:3000](http://localhost:3000) with your web browser to see the app.
 
-### `npm run eject`
+This application also already deployed on [Vercel](https://goto-phonebook-app.vercel.app/).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+> GitHub [@ryorichardo](https://github.com/ryorichardo) &nbsp;&middot;&nbsp;
+> LinkedIn [Ryo Richardo](https://www.linkedin.com/in/ryorichardo/)
