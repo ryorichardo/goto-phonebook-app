@@ -19,7 +19,14 @@ import { Search, SearchIconWrapper, StyledInputBase } from '../App';
 
 function DesktopContactPage() {
 
-    const { data, refetch } = useQuery(GET_CONTACT_LIST);
+    const { data, refetch } = useQuery(GET_CONTACT_LIST, {
+        variables: {
+            order_by: {
+                first_name: "asc",
+                last_name: "asc"
+            }
+        }
+    });
 
     const [createCard, setCreateCard] = useState(false)
     const [page, setPage] = useState(1)
@@ -115,9 +122,9 @@ function DesktopContactPage() {
 
     const filterSearchHandler = (contact) => {
         return (search === undefined ||
-                contact.first_name.toLowerCase().includes(search) ||
-                contact.last_name.toLowerCase().includes(search) ||
-                (contact.first_name.toLowerCase() + " " + contact.last_name.toLowerCase()).includes(search))
+                contact.first_name.toLowerCase().includes(search.toLowerCase()) ||
+                contact.last_name.toLowerCase().includes(search.toLowerCase()) ||
+                (contact.first_name.toLowerCase() + " " + contact.last_name.toLowerCase()).includes(search.toLowerCase()))
     }
 
     return (
