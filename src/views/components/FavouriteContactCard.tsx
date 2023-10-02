@@ -41,7 +41,7 @@ function FavouriteContactCard({ contacts, setSelectedContact, setDetailModal }: 
                                     src="https://i.pinimg.com/736x/2c/d0/16/2cd0166a3b2f3ae98caf92daaa075e05.jpg"
                                 />
                                 <Typography variant="caption" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.first_name} {contact.last_name}</Typography>
-                                <Typography variant="caption" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.phones[0].number}</Typography>
+                                <Typography variant="caption" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact?.phones[0]?.number!}</Typography>
                                 {contact.phones.length > 1 ? (
                                     <Typography variant="caption"><b>+{contact.phones.length-1} more</b></Typography>
                                 ) : (
