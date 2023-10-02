@@ -62,9 +62,9 @@ function ContactCard(props: {
                     <Grid item alignItems="left" xs={8} lg={9} onClick={detailModalHandler} sx={{ margin: "auto" }}>
                         <Stack>
                             <Typography variant="h6" sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.first_name} {contact.last_name}</Typography>
-                            <Typography variant="caption" sx={{ color: 'rgb(150, 150, 150)', textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact.phones[0].number}</Typography>
+                            <Typography variant="caption" sx={{ color: 'rgb(150, 150, 150)', textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{contact?.phones[0]?.number!}</Typography>
                             {contact.phones.length > 1 ? (
-                                <Typography variant="caption" sx={{ color: 'rgb(150, 150, 150)' }}><b>+{contact.phones.length-1} more</b></Typography>
+                                <Typography variant="caption" sx={{ color: 'rgb(150, 150, 150)' }}><b>+{contact?.phones?.length-1} more</b></Typography>
                             ) : (
                                 <></>
                             )}
